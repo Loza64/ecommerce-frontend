@@ -14,7 +14,6 @@ const MAX_POLLS = 15
 export default function ResultPage() {
   const [searchParams] = useSearchParams()
   const orderId = searchParams.get('order') ?? ''
-  // Stripe agrega este parámetro cuando vuelve de una redirección (3D Secure)
   const redirectStatus = searchParams.get('redirect_status')
 
   const {
@@ -25,7 +24,6 @@ export default function ResultPage() {
     queryKey: ['orders', orderId],
     queryFn: () => orderService.findById({ id: orderId }),
     enabled: !!orderId,
-    // el webhook de Stripe confirma el pago de forma asíncrona: se consulta hasta verlo pagado
     refetchInterval: (query) =>
       query.state.data?.status === 'pending_payment' &&
       query.state.dataUpdateCount < MAX_POLLS

@@ -26,6 +26,7 @@ function SignupPage() {
   const onSubmit = async (values: SignupFormValues) => {
     setError(null)
     try {
+      // confirmPassword solo se valida en el front; el backend lo rechaza
       const { username, name, surname, email, password } = values
       const session = await signup({ username, name, surname, email, password })
       saveSession(session)

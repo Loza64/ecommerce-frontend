@@ -64,6 +64,70 @@
   --warning-soft: color-mix(in srgb, var(--warning) 22%, var(--surface));
 }
 
+/* --- react-toastify: acompanha a paleta e o tema da aplicação --- */
+.Toastify__toast-container {
+  --toastify-color-light: var(--surface);
+  --toastify-color-dark: var(--surface);
+  --toastify-text-color-light: var(--text);
+  --toastify-text-color-dark: var(--text);
+  --toastify-color-success: var(--success);
+  --toastify-color-error: var(--danger);
+  --toastify-color-warning: var(--warning);
+  --toastify-color-info: var(--primary);
+  --toastify-color-progress-light: var(--primary);
+  --toastify-color-progress-dark: var(--primary);
+}
+
+.Toastify__toast-container .Toastify__toast {
+  color: var(--text);
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  box-shadow: var(--select-shadow);
+}
+
+.Toastify__toast-container .Toastify__toast--success {
+  border-inline-start: 4px solid var(--success);
+}
+
+.Toastify__toast-container .Toastify__toast--error {
+  border-inline-start: 4px solid var(--danger);
+}
+
+.Toastify__toast-container .Toastify__toast--warning {
+  border-inline-start: 4px solid var(--warning);
+}
+
+.Toastify__toast-container .Toastify__toast--info {
+  border-inline-start: 4px solid var(--primary);
+}
+
+.Toastify__toast-container .Toastify__toast-icon {
+  color: var(--primary);
+}
+
+.Toastify__toast-container .Toastify__toast--success .Toastify__toast-icon {
+  color: var(--success);
+}
+
+.Toastify__toast-container .Toastify__toast--error .Toastify__toast-icon {
+  color: var(--danger);
+}
+
+.Toastify__toast-container .Toastify__toast--warning .Toastify__toast-icon {
+  color: var(--warning);
+}
+
+.Toastify__toast-container .Toastify__close-button {
+  color: var(--text-muted);
+  opacity: 0.7;
+}
+
+.Toastify__toast-container .Toastify__close-button:hover {
+  color: var(--text);
+  opacity: 1;
+}
+
 * {
   scrollbar-width: thin;
   scrollbar-color: transparent transparent;

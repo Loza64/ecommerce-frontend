@@ -11,6 +11,8 @@ export interface OrderItem extends BaseEntity {
   quantity: number
   unitPrice: number
   lineTotal: number
+  /** Descuento de la línea cuando el cupón es de vendedor; 0 en otro caso */
+  discountAmount: number
 }
 
 export default interface Order extends BaseEntity {
@@ -26,9 +28,12 @@ export default interface Order extends BaseEntity {
 
 /** Vista del vendedor: item vendido en un pedido ya pagado */
 export interface Sale extends OrderItem {
+  /** lineTotal − discountAmount: lo que cobra el vendedor por la línea */
+  netTotal: number
   order: {
     id: number
     status: OrderStatus
+    couponCode: string | null
     paidAt: string | null
     buyer: { id: number; username: string; name: string } | null
   }

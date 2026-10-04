@@ -25,6 +25,10 @@ export default interface Cart extends BaseEntity {
     discountType: DiscountType
     discountValue: number
     expirationDate: string
+    /** Vendedor dueño del cupón; null = cupón de la plataforma */
+    seller: { id: number; username: string; name: string } | null
+    /** false si el carrito ya no tiene productos a los que aplique */
+    applicable: boolean
   } | null
   subtotal: number
   discount: number

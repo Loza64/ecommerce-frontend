@@ -11,6 +11,8 @@ export const couponFormSchema = z
     discountType: z.enum(['percentage', 'fixed']),
     discountValue: z.string().min(1, 'El valor es obligatorio.'),
     expirationDate: z.string().min(1, 'La fecha de expiración es obligatoria.'),
+    maxUses: z.string().trim(),
+    maxUsesPerUser: z.string().trim(),
   })
   .superRefine((data, ctx) => {
     const value = Number(data.discountValue)
@@ -25,6 +27,35 @@ export const couponFormSchema = z
         code: 'custom',
         path: ['discountValue'],
         message: 'El porcentaje no puede superar 100.',
+      })
+    }
+
+    const limits: Array<['maxUses' | 'maxUsesPerUser', string]> = [
+      ['maxUses', data.maxUses],
+      ['maxUsesPerUser', data.maxUsesPerUser],
+    ]
+    for (const [field, raw] of limits) {
+      if (raw === '') {
+        continue
+      }
+      const n = Number(raw)
+      if (!Number.isInteger(n) || n < 1) {
+        ctx.addIssue({
+          code: 'custom',
+          path: [field],
+          message: 'Ingresa un entero mayor o igual a 1, o déjalo vacío.',
+        })
+      }
+    }
+    if (
+      data.maxUses !== '' &&
+      data.maxUsesPerUser !== '' &&
+      Number(data.maxUsesPerUser) > Number(data.maxUses)
+    ) {
+      ctx.addIssue({
+        code: 'custom',
+        path: ['maxUsesPerUser'],
+        message: 'No puede superar el límite total de usos.',
       })
     }
   })

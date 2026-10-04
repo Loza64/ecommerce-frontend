@@ -27,5 +27,8 @@ export const permissionService = new Service<Permissions>({
 
 export const couponService = new Service<Coupon>({ endpoint: 'coupons' })
 
+/** Cupones del vendedor: solo descuentan sus productos y el descuento lo asume él. */
+export const myCouponService = new Service<Coupon>({ endpoint: 'coupons/mine' })
+
 /** Lo que el usuario ha vendido (items de pedidos pagados). */
 export const saleService = new Service<Sale>({ endpoint: 'orders/sales' })

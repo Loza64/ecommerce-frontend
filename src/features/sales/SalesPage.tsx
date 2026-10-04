@@ -57,7 +57,19 @@ export default function SalesPage() {
       title: 'Total',
       key: 'lineTotal',
       align: 'right',
-      render: (_v, record) => formatMoney(record.lineTotal),
+      render: (_v, record) =>
+        Number(record.discountAmount) > 0 ? (
+          <div className="flex flex-col items-end">
+            <span className="font-medium">{formatMoney(record.netTotal)}</span>
+            <span className="text-xs text-(--text-muted)">
+              {formatMoney(record.lineTotal)} −{' '}
+              {formatMoney(record.discountAmount)}
+              {record.order.couponCode ? ` (${record.order.couponCode})` : ''}
+            </span>
+          </div>
+        ) : (
+          formatMoney(record.lineTotal)
+        ),
     },
     {
       title: 'Comprador',

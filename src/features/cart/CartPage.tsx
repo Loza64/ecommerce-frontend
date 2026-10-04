@@ -247,20 +247,39 @@ export default function CartPage() {
           <h2 className="m-0 text-base font-semibold text-(--text)">Resumen</h2>
 
           {cart.coupon ? (
-            <div className="flex items-center justify-between gap-2 rounded-(--radius-md) bg-(--success-soft) px-3 py-2 text-[13px] text-(--success)">
-              <span className="inline-flex items-center gap-1.5 font-semibold">
-                <Tag size={14} />
-                {cart.coupon.code}
-              </span>
-              <button
-                type="button"
-                aria-label="Quitar cupón"
-                className="inline-flex cursor-pointer border-none bg-transparent p-0 text-(--success)"
-                disabled={removeCoupon.isPending}
-                onClick={() => run(() => removeCoupon.mutateAsync())}
-              >
-                <X size={15} />
-              </button>
+            <div
+              className={`flex flex-col gap-1 rounded-(--radius-md) px-3 py-2 text-[13px] ${
+                cart.coupon.applicable
+                  ? 'bg-(--success-soft) text-(--success)'
+                  : 'bg-(--warning-soft) text-(--warning)'
+              }`}
+            >
+              <div className="flex items-center justify-between gap-2">
+                <span className="inline-flex items-center gap-1.5 font-semibold">
+                  <Tag size={14} />
+                  {cart.coupon.code}
+                </span>
+                <button
+                  type="button"
+                  aria-label="Quitar cupón"
+                  className="inline-flex cursor-pointer border-none bg-transparent p-0 text-current"
+                  disabled={removeCoupon.isPending}
+                  onClick={() => run(() => removeCoupon.mutateAsync())}
+                >
+                  <X size={15} />
+                </button>
+              </div>
+              {cart.coupon.seller && (
+                <span className="text-xs">
+                  Solo descuenta productos de {cart.coupon.seller.name}.
+                </span>
+              )}
+              {!cart.coupon.applicable && (
+                <span className="text-xs font-medium">
+                  Ya no hay productos en tu carrito a los que aplique. Quítalo
+                  para continuar.
+                </span>
+              )}
             </div>
           ) : (
             <form onSubmit={onApplyCoupon} className="flex gap-2">
@@ -302,7 +321,9 @@ export default function CartPage() {
             variant="primary"
             fullWidth
             className="py-3"
-            disabled={busy || hasStockProblem}
+            disabled={
+              busy || hasStockProblem || cart.coupon?.applicable === false
+            }
             onClick={checkout}
           >
             {paying ? 'Preparando el pago...' : 'Continuar al pago'}

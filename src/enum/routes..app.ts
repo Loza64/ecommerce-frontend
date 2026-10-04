@@ -17,4 +17,5 @@ export enum RoutesEnum {
   MY_ORDERS = '/account/orders',
   MY_PRODUCTS = '/account/products',
   MY_SALES = '/account/sales',
+  MY_COUPONS = '/account/coupons',
 }

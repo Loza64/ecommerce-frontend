@@ -94,7 +94,8 @@ export default function PayPage() {
   const [searchParams] = useSearchParams()
   const navigate = useNavigate()
   const queryClient = useQueryClient()
-  const { theme } = useTheme()
+  const { theme, palette } = useTheme()
+  const colors = palette(theme)
   const [cancelling, setCancelling] = useState(false)
 
   const orderId = searchParams.get('order') ?? ''
@@ -153,7 +154,20 @@ export default function PayPage() {
             stripe={stripePromise}
             options={{
               clientSecret: pending.clientSecret,
-              appearance: { theme: theme === 'dark' ? 'night' : 'stripe' },
+              appearance: {
+                theme: theme === 'dark' ? 'night' : 'stripe',
+                variables: {
+                  colorPrimary: colors.primary,
+                  colorBackground: colors.surface,
+                  colorText: colors.text,
+                  colorTextSecondary: colors.text,
+                  colorTextPlaceholder: colors.text,
+                  colorDanger: colors.danger,
+                  borderRadius: '10px',
+                  fontFamily:
+                    "'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
+                },
+              },
             }}
           >
             <PaymentForm

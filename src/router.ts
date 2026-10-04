@@ -7,6 +7,7 @@ export type Path =
   | `*`
   | `/`
   | `/account`
+  | `/account/coupons`
   | `/account/orders`
   | `/account/products`
   | `/account/sales`

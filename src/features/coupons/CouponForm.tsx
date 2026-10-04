@@ -3,6 +3,7 @@ import { useForm, useWatch } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import useCrud from '@/hooks/core/useCrud'
 import { couponService } from '@/api'
+import type Service from '@/sdk/core/Service'
 import Coupon from '@/models/entities/Coupon'
 import { FormField } from '@/components/ui/FormField'
 import { Button } from '@/components/ui/Button'
@@ -12,16 +13,21 @@ import errorResponse from '@/utils/errorResponse'
 
 export interface CouponFormProps {
   couponId: string | number | null
+  /** Por defecto el servicio de administración; el vendedor usa `coupons/mine` */
+  service?: Service<Coupon>
+  queryKey?: string
   onSaved: () => void
   onCancelled: () => void
 }
 
 export function CouponForm({
   couponId,
+  service = couponService,
+  queryKey = 'coupons',
   onSaved,
   onCancelled,
 }: CouponFormProps) {
-  const crud = useCrud<Coupon>({ service: couponService, queryKey: 'coupons' })
+  const crud = useCrud<Coupon>({ service, queryKey })
   const [formError, setFormError] = useState<string | null>(null)
   const saving = crud.isCreating || crud.isUpdating
   const isEditing = couponId !== null && couponId !== undefined
@@ -43,6 +49,8 @@ export function CouponForm({
       discountType: 'percentage',
       discountValue: '',
       expirationDate: '',
+      maxUses: '',
+      maxUsesPerUser: '',
     },
   })
 
@@ -55,6 +63,8 @@ export function CouponForm({
         discountType: editCoupon.discountType,
         discountValue: String(editCoupon.discountValue),
         expirationDate: toDatetimeLocal(editCoupon.expirationDate),
+        maxUses: String(editCoupon.maxUses ?? ''),
+        maxUsesPerUser: String(editCoupon.maxUsesPerUser ?? ''),
       })
     }
   }, [editCoupon, isEditing, reset])
@@ -66,6 +76,10 @@ export function CouponForm({
       discountType: values.discountType,
       discountValue: Number(values.discountValue),
       expirationDate: fromDatetimeLocal(values.expirationDate),
+      // vacío = sin límite (null también borra un límite al editar)
+      maxUses: values.maxUses === '' ? null : Number(values.maxUses),
+      maxUsesPerUser:
+        values.maxUsesPerUser === '' ? null : Number(values.maxUsesPerUser),
     }
 
     try {
@@ -142,6 +156,42 @@ export function CouponForm({
           {...register('expirationDate')}
         />
       </FormField>
+
+      <div className="auth-row">
+        <FormField
+          label="Usos totales"
+          htmlFor="coupon-max-uses"
+          hint="Vacío = sin límite."
+          error={errors.maxUses?.message}
+        >
+          <input
+            id="coupon-max-uses"
+            className="field-input"
+            type="number"
+            step="1"
+            min="1"
+            inputMode="numeric"
+            {...register('maxUses')}
+          />
+        </FormField>
+
+        <FormField
+          label="Usos por comprador"
+          htmlFor="coupon-max-uses-user"
+          hint="Vacío = sin límite."
+          error={errors.maxUsesPerUser?.message}
+        >
+          <input
+            id="coupon-max-uses-user"
+            className="field-input"
+            type="number"
+            step="1"
+            min="1"
+            inputMode="numeric"
+            {...register('maxUsesPerUser')}
+          />
+        </FormField>
+      </div>
 
       {formError && <span className="form-error">{formError}</span>}
 

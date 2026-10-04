@@ -1,5 +1,11 @@
 import { NavLink, Outlet } from 'react-router-dom'
-import { Package, Receipt, TrendingUp, type LucideIcon } from 'lucide-react'
+import {
+  Package,
+  Receipt,
+  Ticket,
+  TrendingUp,
+  type LucideIcon,
+} from 'lucide-react'
 import { RoutesEnum } from '@/enum/routes..app'
 import { cn } from '@/lib/utils'
 
@@ -7,6 +13,7 @@ const TABS: { label: string; to: RoutesEnum; icon: LucideIcon }[] = [
   { label: 'Mis compras', to: RoutesEnum.MY_ORDERS, icon: Receipt },
   { label: 'Mis productos', to: RoutesEnum.MY_PRODUCTS, icon: Package },
   { label: 'Mis ventas', to: RoutesEnum.MY_SALES, icon: TrendingUp },
+  { label: 'Mis cupones', to: RoutesEnum.MY_COUPONS, icon: Ticket },
 ]
 
 export default function AccountShell() {
