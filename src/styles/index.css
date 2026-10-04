@@ -1,0 +1,372 @@
+@import "tailwindcss";
+
+:root,
+[data-theme] {
+  /* --- Colores base (personalizables) --- */
+  --bg: #f5f6f8;
+  --surface: #ffffff;
+  --text: #1a1d24;
+  --primary: #4338ca;
+  --danger: #dc2626;
+  --success: #16794f;
+  --warning: #b45309;
+  --sidebar-bg: #14161f;
+
+  --sidebar-text-active: #ffffff;
+  --primary-contrast: #ffffff;
+
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-lg: 14px;
+
+  --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  --select-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.15), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+
+  /* --- Derivados: calculados con color-mix(), no hay que tocarlos --- */
+  --border: color-mix(in srgb, var(--text) 10%, var(--surface));
+  --text-muted: color-mix(in srgb, var(--text) 55%, var(--surface));
+  --surface-muted: color-mix(in srgb, var(--surface) 50%, var(--bg));
+
+  --primary-hover: color-mix(in srgb, var(--primary) 90%, black);
+  --primary-soft: color-mix(in srgb, var(--primary) 10%, var(--surface));
+  --primary-color: var(--primary);
+
+  --danger-soft: color-mix(in srgb, var(--danger) 8%, var(--surface));
+  --success-soft: color-mix(in srgb, var(--success) 8%, var(--surface));
+  --warning-soft: color-mix(in srgb, var(--warning) 8%, var(--surface));
+
+  --sidebar-text: color-mix(in srgb, var(--sidebar-text-active) 65%, var(--sidebar-bg));
+
+  --select-bg: var(--surface);
+  --select-border: var(--border);
+  --select-option-text: var(--text);
+  --select-option-hover-bg: var(--surface-muted);
+  --select-option-hover-text: var(--text);
+}
+
+[data-theme='dark'] {
+  /* --- Colores base por defecto en modo oscuro --- */
+  --bg: #0f1117;
+  --surface: #171a23;
+  --text: #e8e9ed;
+  --primary: #6366f1;
+  --danger: #f87171;
+  --success: #4ade80;
+  --warning: #fbbf24;
+  --sidebar-bg: #0b0c11;
+
+  /* --- Derivados que necesitan un peso distinto sobre fondos oscuros --- */
+  --border: color-mix(in srgb, var(--text) 14%, var(--surface));
+  --primary-hover: color-mix(in srgb, var(--primary) 88%, white);
+  --primary-soft: color-mix(in srgb, var(--primary) 24%, var(--surface));
+  --danger-soft: color-mix(in srgb, var(--danger) 22%, var(--surface));
+  --success-soft: color-mix(in srgb, var(--success) 22%, var(--surface));
+  --warning-soft: color-mix(in srgb, var(--warning) 22%, var(--surface));
+}
+
+* {
+  scrollbar-width: thin;
+  scrollbar-color: transparent transparent;
+  -ms-overflow-style: auto;
+  transition: scrollbar-color 0.1s ease-in-out;
+}
+
+*::-webkit-scrollbar {
+  width: 0px;
+  height: 0px;
+}
+
+*::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+*::-webkit-scrollbar-thumb {
+  background-color: transparent;
+  border-radius: 10px;
+  transition: background-color 0.1s ease-in-out, width 0.1s ease-in-out, height 0.1s ease-in-out;
+}
+
+*:hover {
+  scrollbar-color: var(--primary-color) transparent;
+}
+
+*:hover::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+*:hover::-webkit-scrollbar-thumb {
+  background-color: var(--primary-color);
+}
+
+html,
+body,
+#root {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  font-family: var(--font-sans);
+  color: var(--text);
+  background: var(--bg);
+  -webkit-font-smoothing: antialiased;
+  transition: background-color 0.15s ease, color 0.15s ease;
+}
+
+/* --- Animaciones de modales --- */
+@keyframes fade-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes fade-out {
+  from { opacity: 1; }
+  to { opacity: 0; }
+}
+
+@keyframes rise-in {
+  from { opacity: 0; transform: translateY(12px) scale(0.98); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+@keyframes rise-out {
+  from { opacity: 1; transform: translateY(0) scale(1); }
+  to { opacity: 0; transform: translateY(8px) scale(0.98); }
+}
+
+@keyframes icon-pop-in {
+  0% { opacity: 0; transform: scale(0.5); }
+  60% { opacity: 1; transform: scale(1.08); }
+  100% { opacity: 1; transform: scale(1); }
+}
+
+/* --- Utilidades compartidas (equivalente a core/shared/styles/utilities.css) --- */
+
+.checkbox-label {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13px;
+  color: var(--text-muted);
+  white-space: nowrap;
+}
+
+.row-actions {
+  display: flex;
+  gap: 6px;
+  justify-content: flex-end;
+}
+
+.hint {
+  font-size: 12px;
+  color: var(--text-muted);
+  font-weight: 400;
+}
+
+.form-error {
+  font-size: 12px;
+  color: var(--danger);
+}
+
+.field-input {
+  padding: 9px 12px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border);
+  font-size: 13px;
+  font-family: inherit;
+  color: var(--text);
+  background: var(--surface);
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.field-input:focus {
+  outline: none;
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px var(--primary-soft);
+}
+
+.field-input:disabled {
+  background: var(--surface-muted);
+  color: var(--text-muted);
+}
+
+.form-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.form-toggle {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  font-weight: 500;
+}
+
+.form-loading-state {
+  padding: 24px 0;
+  text-align: center;
+  color: var(--text-muted);
+  font-size: 13px;
+}
+
+.form-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+  margin-top: 4px;
+  padding-top: 14px;
+  border-top: 1px solid var(--border);
+}
+
+/* --- Páginas de auth (login / signup) --- */
+
+.auth-page {
+  min-height: 100dvh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--bg);
+  padding: 24px;
+}
+
+.auth-card {
+  width: 100%;
+  max-width: 400px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 32px 28px;
+  box-shadow: 0 10px 30px rgba(20, 22, 31, 0.06);
+}
+
+.auth-brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 24px;
+}
+
+.auth-brand-mark {
+  width: 34px;
+  height: 34px;
+  border-radius: var(--radius-sm);
+  background: var(--primary);
+  color: var(--primary-contrast);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 15px;
+  flex-shrink: 0;
+}
+
+.auth-brand-name {
+  font-weight: 600;
+  font-size: 15px;
+  color: var(--text);
+}
+
+.auth-title {
+  margin: 0 0 4px;
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--text);
+}
+
+.auth-subtitle {
+  margin: 0 0 24px;
+  font-size: 13px;
+  color: var(--text-muted);
+}
+
+.auth-footer {
+  margin-top: 20px;
+  text-align: center;
+  font-size: 13px;
+  color: var(--text-muted);
+}
+
+.auth-footer a {
+  color: var(--primary);
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.auth-footer a:hover {
+  text-decoration: underline;
+}
+
+.auth-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+}
+
+@media (max-width: 420px) {
+  .auth-row {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* --- react-select ("SelectApi"), piel custom equivalente a la de ng-select --- */
+
+.select-api-error {
+  display: block;
+  margin-top: 4px;
+  color: var(--danger);
+  font-size: 12px;
+}
+
+/* --- Sidebar del dashboard --- */
+.app-sidebar {
+  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: transform;
+}
+
+.sidebar-overlay {
+  transition: opacity 0.3s ease-in-out, visibility 0.3s ease-in-out;
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+}
+
+@media (min-width: 901px) {
+  .app-sidebar {
+    position: relative;
+    width: 240px;
+    flex-shrink: 0;
+    transform: translateX(0) !important;
+  }
+
+  .sidebar-overlay {
+    display: none !important;
+  }
+}
+
+@media (max-width: 900px) {
+  .app-sidebar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    z-index: 50;
+    width: 260px;
+    max-width: 80vw;
+    box-shadow: 4px 0 24px rgba(0, 0, 0, 0.2);
+    transform: translateX(-100%);
+  }
+
+  .sidebar-is-open .app-sidebar {
+    transform: translateX(0);
+  }
+
+  .sidebar-is-open .sidebar-overlay {
+    opacity: 1;
+    visibility: visible;
+    pointer-events: auto;
+  }
+}

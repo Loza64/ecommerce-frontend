@@ -1,0 +1,11 @@
+allowBuilds:
+  '@swc/core': false
+  esbuild: false
+
+ignoredBuiltDependencies:
+  - '@swc/core'
+  - esbuild
+
+onlyBuiltDependencies:
+  - canvas
+  - core-js
